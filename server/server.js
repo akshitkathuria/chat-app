@@ -4,6 +4,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 
 const {generateMessage} = require('./utils/message')
+const {generateLocationMessage} = require('./utils/message');
 
 const publicpath = path.join(__dirname,"../public");
 
@@ -34,6 +35,10 @@ io.on('connection', (socket)=>{
             text:  message.text,
             createdAt:  new Date().getTime()
         })*/
+    })
+
+    socket.on("create-location", (coords) => {
+        io.emit("newLocationMessage", generateLocationMessage("Admin", coords.latitude, coords.longitude));
     })
 
     socket.on('disconnect', () => {
